@@ -25,30 +25,28 @@ public class LoginTests extends BaseTest {
 
     @Test
     public void UnSuccessfullLogin() throws InterruptedException {
-        driver.findElement(By.id("login-email")).sendKeys(mail);
-        driver.findElement(By.name("login-password")).sendKeys("Qweasd123..");
-        driver.findElement(By.cssSelector("[class='q-primary q-fluid q-button-medium q-button submit']")).click();
-        sleep(3000);
-        String warningMessage = driver.findElement(By.cssSelector("[class=\"message\"]")).getText();
-        Assert.assertEquals(warningMessage, "E-posta adresiniz ve/veya şifreniz hatalı.");
+        loginPage.fillMail(mail)
+                .fillPassword("Qweasd123..")
+                .clickLogin();
 
-        driver.findElement(By.id("login-email")).clear();
-        driver.findElement(By.id("login-email")).sendKeys("mystic.kereem@gmail.com");
-        driver.findElement(By.name("login-password")).clear();
-        driver.findElement(By.name("login-password")).sendKeys(password);
-        driver.findElement(By.cssSelector("[class='q-primary q-fluid q-button-medium q-button submit']")).click();
-        Thread.sleep(3000);
-        String warningMessage2 = driver.findElement(By.cssSelector("[class=\"message\"]")).getText();
-        Assert.assertEquals(warningMessage2, "E-posta adresiniz ve/veya şifreniz hatalı.");
+        sleep(3000);
+        Assert.assertEquals(loginPage.getErrorMessage(), "E-posta adresiniz ve/veya şifreniz hatalı.");
+
+        loginPage.fillMail("mysticdefe@gmail.com")
+                .fillPassword(password)
+                .clickLogin();
+
+        sleep(3000);
+        Assert.assertEquals(loginPage.getErrorMessage(), "E-posta adresiniz ve/veya şifreniz hatalı.");
     }
 
     @Test
     public void ValidateLogin() throws InterruptedException {
-        driver.findElement(By.id("login-email")).sendKeys("mystic.keremgmail.com");
-        driver.findElement(By.name("login-password")).sendKeys(password);
-        driver.findElement(By.cssSelector("[class='q-primary q-fluid q-button-medium q-button submit']")).click();
-        Thread.sleep(3000);
-        String warningMessage = driver.findElement(By.cssSelector("[class=\"message\"]")).getText();
-        Assert.assertEquals(warningMessage, "Lütfen geçerli bir e-posta adresi giriniz.");
+        loginPage.fillMail("mystic.keremgmail.com")
+                .fillPassword(password)
+                .clickLogin();
+
+        sleep(3000);
+        Assert.assertEquals(loginPage.getErrorMessage(), "Lütfen geçerli bir e-posta adresi giriniz.");
     }
 }
