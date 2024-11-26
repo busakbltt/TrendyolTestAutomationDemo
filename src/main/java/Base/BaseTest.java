@@ -5,15 +5,15 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-public class BaseTest {
+public class BaseTest extends BaseLibrary {
 
-    public WebDriver driver;
+    public static WebDriver driver;
 
     @BeforeMethod
     public void OpenBrowser() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.get("https://www.trendyol.com/giris?cb=%2F");
+        driver.get(URL);
     }
 
     @AfterMethod
