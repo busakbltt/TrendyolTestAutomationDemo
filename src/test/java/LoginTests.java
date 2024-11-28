@@ -14,39 +14,55 @@ public class LoginTests extends BaseTest {
     LoginPage loginPage = new LoginPage();
     MainPage mainPage = new MainPage();
 
-    @Test
+    @Test(description = "Başarılı kullanıcı giriş kontrolü")
     public void SuccessfullLogin() throws InterruptedException {
         loginPage.fillMail(mail)
                 .fillPassword(password)
                 .clickLogin();
         sleep(3000);
-        Assert.assertEquals("Hesabım", mainPage.getUserInfo());
+
+        assertEqualsText("Hesabım", mainPage.getUserInfo());
     }
 
-    @Test
+    @Test(description = "Başarısız kullanıcı giriş kontrolü")
     public void UnSuccessfullLogin() throws InterruptedException {
         loginPage.fillMail(mail)
                 .fillPassword("Qweasd123..")
                 .clickLogin();
 
         sleep(3000);
-        Assert.assertEquals(loginPage.getErrorMessage(), "E-posta adresiniz ve/veya şifreniz hatalı.");
+        assertEqualsText(loginPage.getErrorMessage(), "E-posta adresiniz ve/veya şifreniz hatalı.");
 
         loginPage.fillMail("mysticdefe@gmail.com")
                 .fillPassword(password)
                 .clickLogin();
 
         sleep(3000);
-        Assert.assertEquals(loginPage.getErrorMessage(), "E-posta adresiniz ve/veya şifreniz hatalı.");
+        assertEqualsText(loginPage.getErrorMessage(), "E-posta adresiniz ve/veya şifreniz hatalı.");
     }
 
-    @Test
+    @Test(description = "Geçersiz karakter girişi")
     public void ValidateLogin() throws InterruptedException {
         loginPage.fillMail("mystic.keremgmail.com")
                 .fillPassword(password)
                 .clickLogin();
 
         sleep(3000);
-        Assert.assertEquals(loginPage.getErrorMessage(), "Lütfen geçerli bir e-posta adresi giriniz.");
+        assertEqualsText(loginPage.getErrorMessage(), "Lütfen geçerli bir e-posta adresi giriniz.");
+    }
+
+    @Test(description = "Max min karakter kontrolü")
+    public void MaxMinCharacterControl() throws InterruptedException {
+        loginPage.clickLogin();
+
+        sleep(3000);
+        assertEqualsText(loginPage.getErrorMessage(), "Lütfen e-posta ve/veya şifre alanını doldurunuz");
+
+        loginPage.fillMail("arrestedbyoengeadfdsafmsadlkglasdkghoğsahgoılğasdhgılkğsadghbnlasdhbglkjasdhg fasdnhcgkljfsahkjlsadbklgjsadbhkljghasbdkjlbsadkljlksfdjlkhgvdfsajklsdfajhtgjklasdfjhgdasfhjlkjlhkg")
+                .fillPassword("dsafdasjkhfodsahgsdahgdsahgljksadghljksadhglkjasdhgoısdaghoıusadhgıosadhgoısadhgoısadhgoısahgoısadhgoıasdhgoısadhgoısahgoıpsadhgoıpsahgosaoıshgoasıhgsaıoghasıohghsdaıoghsaıodgsad")
+                .clickLogin();
+
+        sleep(3000);
+        assertEqualsText(loginPage.getErrorMessage(), "Lütfen geçerli bir e-posta adresi giriniz.");
     }
 }
